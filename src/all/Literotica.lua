@@ -1,4 +1,4 @@
--- {"id":1308639970,"ver":"1.0.9","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639970,"ver":"1.0.10","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.literotica.com"
 local settings = {}
@@ -224,7 +224,7 @@ local function parseNovel(novelURL, loadChapters)
 	if loadChapters then
 		local chapters
 		if series ~= nil then
-			local chapterEntries = series:select("ul.series__works li")
+			local chapterEntries = series:select("h2:contains(Table of Contents) + ul > li")
 			if chapterEntries:size() > 0 then
 				chapters = map(chapterEntries, function(v, i)
 					local chapter = v:selectFirst("a[href*='/s/']")
