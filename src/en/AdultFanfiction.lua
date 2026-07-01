@@ -1,11 +1,12 @@
--- {"id":1308639978,"ver":"1.0.1","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639978,"ver":"1.0.5","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.adult-fanfiction.org"
 local settings = {}
 
 local function shrinkURL(url)
-	local subdomain, rest = url:match(
-		"^https?://([^./]+)%.?adult%-fanfiction%.org(/.*)$"
+	local cleanUrl = url:gsub("^https?://", "")
+	local subdomain, rest = cleanUrl:match(
+		"^([^./]+)%.?adult%-fanfiction%.org(/.*)$"
 	)
 	return (subdomain or "www") .. "@" .. (rest or "/")
 end
@@ -171,14 +172,26 @@ local function parseNovel(novelURL, loadChapters)
 		"https://members.adult-fanfiction.org/load-user-stories.php?subdomain=" .. subdomain .. "&uid=" .. authorId
 	)
 
-	local storyCard = authorStories:selectFirst("a[href*='story.php?no=" .. storyId .. "']")
-			:parent() -- <h3>
-			:parent() -- <div class="story-card-header">
-			:parent()
-			:parent()
+	local storyLink = authorStories:selectFirst("a[href*='story.php?no=" .. storyId .. "']")
+	local storyCard = storyLink
+	if storyCard ~= nil then
+		while storyCard ~= nil do
+			local classAttr = storyCard:attr("class") or ""
+			local padded = " " .. classAttr .. " "
+			if string.find(padded, "%sstory%-card%s") or string.find(padded, "%sstory%-entry%s") then
+				break
+			end
+			storyCard = storyCard:parent()
+		end
+	end
 
-	local summary = storyCard:selectFirst(".story-card-description"):wholeText()
-		:gsub('^%s*(.-)%s*$', '%1')
+	local summary = ""
+	if storyCard ~= nil then
+		local descElement = storyCard:selectFirst(".story-card-description")
+		if descElement ~= nil then
+			summary = descElement:wholeText():gsub('^%s*(.-)%s*$', '%1')
+		end
+	end
 
 	local stats = map(
 			document:select(".story-header-right div.story-header-stats div"),
@@ -204,10 +217,12 @@ local function parseNovel(novelURL, loadChapters)
 		end
 	end
 
-	map(storyCard:select(".story-card-tags .story-tag"), function(v)
-		local tag = v:text()
-		table.insert(genres, Tags[tag] or tag)
-	end)
+	if storyCard ~= nil then
+		map(storyCard:select(".story-card-tags .story-tag"), function(v)
+			local tag = v:text()
+			table.insert(genres, Tags[tag] or tag)
+		end)
+	end
 
 	local status = NovelStatus.PUBLISHING
 	for _, value in ipairs(genres) do
@@ -264,12 +279,21 @@ local function search(filters)
 	local page = filters[PAGE]
 	local url = filters[QUERY]:gsub('^%s*(.-)%s*$', '%1')
 	local shrunkUrl = shrinkURL(url)
-	if page == 1 and shrunkUrl:match("@?[^/]*story%.php%?no=") then
+	if page == 1 and shrunkUrl:match("story%.php%?no=") then
 		local novelUrl = url:gsub("&chapter=%d+", ""):gsub("?chapter=%d+&", "?"):gsub("?chapter=%d+", "")
 		local novel = GETDocumentAdult(novelUrl)
+		local storyId = novelUrl:match("no=(%d+)") or "Unknown"
+		
+		-- Safety check: Avoid nil pointer crashes if story doesn't exist or is blocked
+		local titleElement = novel:selectFirst(".story-header-left > h1")
+		local title = "Story #" .. storyId
+		if titleElement ~= nil then
+			title = titleElement:text()
+		end
+
 		return {
 			Novel {
-				title = novel:selectFirst(".story-header-left > h1"):text(),
+				title = title,
 				link = shrinkURL(novelUrl),
 				imageURL = ""
 			}
@@ -277,7 +301,7 @@ local function search(filters)
 	end
 
 	local subdomain = shrunkUrl:match("^@?(%w+)@/$")
-	if shrunkUrl:match("@?[^?]*?cat=%d+") or (subdomain and subdomain ~= "www") then
+	if shrunkUrl:match("cat=%d+") or (subdomain and subdomain ~= "www") then
 		local newUrl = addPage(removePage(url), page)
 		for i, tag in ipairs(TagsIndexed) do
 			local value = filters[i + 100] or 0
