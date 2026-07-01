@@ -1,4 +1,4 @@
--- {"id":1308639970,"ver":"1.0.8","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639970,"ver":"1.0.9","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.literotica.com"
 local settings = {}
@@ -237,7 +237,9 @@ local function parseNovel(novelURL, loadChapters)
 					})
 				end)
 			end
-		else
+		end
+
+		if chapters == nil then
 			chapters = {
 				NovelChapter({
 					order = 0,
@@ -246,6 +248,7 @@ local function parseNovel(novelURL, loadChapters)
 				}),
 			}
 		end
+
 		info:setChapters(AsList(chapters))
 	end
 
