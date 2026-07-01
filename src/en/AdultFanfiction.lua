@@ -1,4 +1,4 @@
--- {"id":1308639978,"ver":"1.0.2","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639978,"ver":"1.0.3","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.adult-fanfiction.org"
 local settings = {}
@@ -281,9 +281,18 @@ local function search(filters)
 	if page == 1 and shrunkUrl:match("story%.php%?no=") then
 		local novelUrl = url:gsub("&chapter=%d+", ""):gsub("?chapter=%d+&", "?"):gsub("?chapter=%d+", "")
 		local novel = GETDocumentAdult(novelUrl)
+		local storyId = novelUrl:match("no=(%d+)") or "Unknown"
+		
+		-- Safety check: Avoid nil pointer crashes if story doesn't exist, is blocked, or redirect failed
+		local titleElement = novel:selectFirst(".story-header-left > h1")
+		local title = "Story #" .. storyId
+		if titleElement ~= nil then
+			title = titleElement:text()
+		end
+
 		return {
 			Novel {
-				title = novel:selectFirst(".story-header-left > h1"):text(),
+				title = title,
 				link = shrinkURL(novelUrl),
 				imageURL = ""
 			}
