@@ -1,4 +1,4 @@
--- {"id":1308639978,"ver":"1.0.3","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639978,"ver":"1.0.4","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.adult-fanfiction.org"
 local settings = {}
@@ -18,13 +18,8 @@ end
 --- @param url string
 --- @return Document
 local function GETDocumentAdult(url)
-	return RequestDocument(
-			RequestBuilder()
-					:get()
-					:url(url)
-					:addHeader("Cookie", "age_verified=1")
-					:build()
-	)
+	local response = Request(GET(url, {["Cookie"] = "age_verified=1"}))
+	return Document(response:body():string())
 end
 
 --- @param element Element
@@ -175,9 +170,9 @@ local function parseNovel(novelURL, loadChapters)
 	local storyLink = authorStories:selectFirst("a[href*='story.php?no=" .. storyId .. "']")
 	local storyCard = storyLink
 	if storyCard ~= nil then
-		while storyCard ~= nil and storyCard:tagName() ~= "body" do
+		while storyCard ~= nil do
 			local classAttr = storyCard:attr("class") or ""
-			if classAttr:find("story%-card") or classAttr:find("story%-entry") then
+			if string.find(classAttr, "story%-card") or string.find(classAttr, "story%-entry") then
 				break
 			end
 			storyCard = storyCard:parent()
