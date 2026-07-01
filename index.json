@@ -80,9 +80,9 @@
       "fileName": "AdultFanfiction",
       "imageURL": "",
       "lang": "en",
-      "ver": "1.0.6",
+      "ver": "1.0.7",
       "libVer": "1.0.0",
-      "md5": "16b74f083cd450a97e58c4dcf309644725291e78e1682f1da8849b30b448b6df",
+      "md5": "0b4ab2789a4a78b5a5ae955d4f0112fb7f07a228c26de587ffd235dc94aa1f2b",
       "type": "LuaScript"
     }
   ],
