@@ -1,4 +1,4 @@
--- {"id":1308639978,"ver":"1.0.8","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639978,"ver":"1.0.9","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.adult-fanfiction.org"
 local settings = {}
@@ -40,27 +40,9 @@ local function getPassage(chapterURL)
 end
 
 local function parseNovel(novelURL, loadChapters)
-	-- Crash-proof Global Inspector card details viewer
-	local keys = {}
-	for k, v in pairs(_G) do
-		local success, keyStr = pcall(function() return tostring(k) end)
-		if success then
-			local typeSuccess, typeStr = pcall(function() return type(v) end)
-			if typeSuccess then
-				table.insert(keys, keyStr .. " (" .. typeStr .. ")")
-			else
-				table.insert(keys, keyStr .. " (type error)")
-			end
-		else
-			table.insert(keys, "[key error]")
-		end
-	end
-	table.sort(keys)
-	local desc = table.concat(keys, "\n")
-
 	return NovelInfo {
 		title = "Tsundoku Global Environment API",
-		description = desc,
+		description = "Inspect search results for the diagnostic output.",
 		genres = {"Debug"},
 		authors = {"System"},
 		status = NovelStatus.COMPLETED
@@ -70,9 +52,24 @@ end
 --- @param filters table @of applied filter values [QUERY] is the search query, may be empty
 --- @return Novel[]
 local function search(filters)
+	local status, result = pcall(function()
+		local Headers = luajava.bindClass("okhttp3.Headers")
+		local builder = luajava.newInstance("okhttp3.Headers$Builder")
+		builder:add("Cookie", "age_verified=1")
+		local headers = builder:build()
+		return headers
+	end)
+
+	local title = "Result: "
+	if status then
+		title = title .. "Success! " .. tostring(result)
+	else
+		title = title .. "Failed: " .. tostring(result)
+	end
+
 	return {
 		Novel {
-			title = "Inspect Globals (Click Here)",
+			title = title,
 			link = "how.v1",
 			imageURL = ""
 		}
@@ -95,7 +92,7 @@ return {
 		Listing("Nothing", false, function(data)
 			return {
 				Novel {
-					title = "Inspect Globals (Click Here)",
+					title = "Inspect search results.",
 					link = "how.v1",
 					imageURL = ""
 				}
