@@ -1,4 +1,4 @@
--- {"id":1308639978,"ver":"1.0.7","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639978,"ver":"1.0.8","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.adult-fanfiction.org"
 local settings = {}
@@ -18,7 +18,6 @@ end
 --- @param url string
 --- @return Document
 local function GETDocumentAdult(url)
-	-- Temp safe fallback so compiler doesn't fail on initialization
 	return Document("<html></html>")
 end
 
@@ -41,10 +40,20 @@ local function getPassage(chapterURL)
 end
 
 local function parseNovel(novelURL, loadChapters)
-	-- Global Inspector card details viewer
+	-- Crash-proof Global Inspector card details viewer
 	local keys = {}
 	for k, v in pairs(_G) do
-		table.insert(keys, tostring(k) .. " (" .. type(v) .. ")")
+		local success, keyStr = pcall(function() return tostring(k) end)
+		if success then
+			local typeSuccess, typeStr = pcall(function() return type(v) end)
+			if typeSuccess then
+				table.insert(keys, keyStr .. " (" .. typeStr .. ")")
+			else
+				table.insert(keys, keyStr .. " (type error)")
+			end
+		else
+			table.insert(keys, "[key error]")
+		end
 	end
 	table.sort(keys)
 	local desc = table.concat(keys, "\n")
