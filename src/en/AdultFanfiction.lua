@@ -1,4 +1,4 @@
--- {"id":1308639978,"ver":"1.0.5","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639978,"ver":"1.0.6","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.adult-fanfiction.org"
 local settings = {}
@@ -278,71 +278,86 @@ end
 local function search(filters)
 	local page = filters[PAGE]
 	local url = filters[QUERY]:gsub('^%s*(.-)%s*$', '%1')
-	local shrunkUrl = shrinkURL(url)
-	if page == 1 and shrunkUrl:match("story%.php%?no=") then
-		local novelUrl = url:gsub("&chapter=%d+", ""):gsub("?chapter=%d+&", "?"):gsub("?chapter=%d+", "")
-		local novel = GETDocumentAdult(novelUrl)
-		local storyId = novelUrl:match("no=(%d+)") or "Unknown"
-		
-		-- Safety check: Avoid nil pointer crashes if story doesn't exist or is blocked
-		local titleElement = novel:selectFirst(".story-header-left > h1")
-		local title = "Story #" .. storyId
-		if titleElement ~= nil then
-			title = titleElement:text()
+	
+	local status, result = pcall(function()
+		local shrunkUrl = shrinkURL(url)
+		if page == 1 and shrunkUrl:match("story%.php%?no=") then
+			local novelUrl = url:gsub("&chapter=%d+", ""):gsub("?chapter=%d+&", "?"):gsub("?chapter=%d+", "")
+			local novel = GETDocumentAdult(novelUrl)
+			local storyId = novelUrl:match("no=(%d+)") or "Unknown"
+			
+			-- Safety check: Avoid nil pointer crashes if story doesn't exist or is blocked
+			local titleElement = novel:selectFirst(".story-header-left > h1")
+			local title = "Story #" .. storyId
+			if titleElement ~= nil then
+				title = titleElement:text()
+			end
+
+			return {
+				Novel {
+					title = title,
+					link = shrinkURL(novelUrl),
+					imageURL = ""
+				}
+			}
 		end
 
+		local subdomain = shrunkUrl:match("^@?(%w+)@/$")
+		if shrunkUrl:match("cat=%d+") or (subdomain and subdomain ~= "www") then
+			local newUrl = addPage(removePage(url), page)
+			for i, tag in ipairs(TagsIndexed) do
+				local value = filters[i + 100] or 0
+				if value == 1 then
+					newUrl = newUrl .. "&tags[]=" .. tag.key .. "&tag_mode[" .. tag.key .. "]=include"
+				elseif value == 2 then
+					newUrl = newUrl .. "&tags[]=" .. tag.key .. "&tag_mode[" .. tag.key .. "]=exclude"
+				end
+			end
+			local sort = filters[2]
+			local sortMode
+			if sort == 1 then
+				sortMode = "published"
+			elseif sort == 2 then
+				sortMode = "reviews"
+			elseif sort == 3 then
+				sortMode = "recommendations"
+			elseif sort == 4 then
+				sortMode = "reading"
+			elseif sort == 5 then
+				sortMode = "views"
+			end
+
+			if sortMode then
+				newUrl = newUrl .. "&sort=" .. sortMode
+			end
+
+			local document = GETDocumentAdult(newUrl)
+			local works = document:select(".story-entry")
+
+			local urlPrefix = shrunkUrl:match("^([^.]+)%@") .. ".adult-fanfiction.org/"
+			return map(works, function(v)
+				local title = v:selectFirst(".story-title")
+				return Novel {
+					title = title:text(),
+					link = urlPrefix .. title:attr("href"),
+					imageURL = ""
+				}
+			end)
+		end
+		return {}
+	end)
+
+	if not status then
 		return {
 			Novel {
-				title = title,
-				link = shrinkURL(novelUrl),
+				title = "Error: " .. tostring(result),
+				link = "how.v1",
 				imageURL = ""
 			}
 		}
+	else
+		return result
 	end
-
-	local subdomain = shrunkUrl:match("^@?(%w+)@/$")
-	if shrunkUrl:match("cat=%d+") or (subdomain and subdomain ~= "www") then
-		local newUrl = addPage(removePage(url), page)
-		for i, tag in ipairs(TagsIndexed) do
-			local value = filters[i + 100] or 0
-			if value == 1 then
-				newUrl = newUrl .. "&tags[]=" .. tag.key .. "&tag_mode[" .. tag.key .. "]=include"
-			elseif value == 2 then
-				newUrl = newUrl .. "&tags[]=" .. tag.key .. "&tag_mode[" .. tag.key .. "]=exclude"
-			end
-		end
-		local sort = filters[2]
-		local sortMode
-		if sort == 1 then
-			sortMode = "published"
-		elseif sort == 2 then
-			sortMode = "reviews"
-		elseif sort == 3 then
-			sortMode = "recommendations"
-		elseif sort == 4 then
-			sortMode = "reading"
-		elseif sort == 5 then
-			sortMode = "views"
-		end
-
-		if sortMode then
-			newUrl = newUrl .. "&sort=" .. sortMode
-		end
-
-		local document = GETDocumentAdult(newUrl)
-		local works = document:select(".story-entry")
-
-		local urlPrefix = shrunkUrl:match("^([^.]+)%@") .. ".adult-fanfiction.org/"
-		return map(works, function(v)
-			local title = v:selectFirst(".story-title")
-			return Novel {
-				title = title:text(),
-				link = urlPrefix .. title:attr("href"),
-				imageURL = ""
-			}
-		end)
-	end
-	return {}
 end
 
 local function searchFilters()
