@@ -1,4 +1,4 @@
--- {"id":1308639978,"ver":"1.0.10","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639978,"ver":"1.0.11","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.adult-fanfiction.org"
 local settings = {}
@@ -136,7 +136,17 @@ local function getPassage(chapterURL)
 	local chap = document:selectFirst(".chapter-content-card .chapter-body")
 	chap = cleanupDocument(chap)
 
-	chap:child(0):before("<h1>" .. title .. "</h1>")
+	if chap ~= nil then
+		local children = chap:children()
+		if children ~= nil and children:size() > 0 then
+			chap:child(0):before("<h1>" .. (title or "Chapter") .. "</h1>")
+		else
+			chap = Document("<h1>" .. (title or "Chapter") .. "</h1>"):selectFirst("body")
+		end
+	else
+		chap = Document("<h1>" .. (title or "Chapter") .. "</h1>"):selectFirst("body")
+	end
+
 	return pageOfElem(chap, true)
 end
 
