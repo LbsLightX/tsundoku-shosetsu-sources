@@ -1,4 +1,4 @@
--- {"id":1308639970,"ver":"1.0.10","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639970,"ver":"1.0.11","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.literotica.com"
 local settings = {}
@@ -74,15 +74,32 @@ local function getPassage(chapterURL)
 
 	local pagesElements = document:select("a[href*='?page=']")
 	if pagesElements:size() > 1 then
-		local lastPage = selectLast(pagesElements):attr("href")
-		local lastPageNumber = tonumber(lastPage:match("[?&]page=(%d+)")) or tonumber(lastPage:match("%d+$"))
-		if lastPageNumber ~= nil then
+		local lastPageElement = selectLast(pagesElements)
+		local lastPage = lastPageElement and lastPageElement:attr("href")
+		local lastPageNumber = 1
+		if lastPage ~= nil then
+			lastPageNumber = tonumber(lastPage:match("[?&]page=(%d+)")) or tonumber(lastPage:match("%d+$")) or 1
+		end
+
+		if lastPageNumber > 25 then
+			lastPageNumber = 25 -- Prevent infinite loops or network timeouts
+		end
+
+		if lastPageNumber > 1 then
 			for i = 2, lastPageNumber do
-				local nextDocument = ClientGetDocument(expandURL(chapterURL) .. "?page=" .. i):selectFirst(
-					"div[itemprop='articleBody']"
-				)
-				nextDocument = cleanupDocument(nextDocument):selectFirst("body"):children()
-				chap:selectFirst("body"):lastChild():after(nextDocument)
+				local nextPageDoc = ClientGetDocument(expandURL(chapterURL) .. "?page=" .. i)
+				local nextContent = nextPageDoc and nextPageDoc:selectFirst("div[itemprop='articleBody']")
+				if nextContent ~= nil then
+					local cleanedContent = cleanupDocument(nextContent)
+					local bodyElement = cleanedContent:selectFirst("body")
+					if bodyElement ~= nil then
+						local nextDocument = bodyElement:children()
+						local currentBody = chap:selectFirst("body")
+						if currentBody ~= nil and currentBody:lastChild() ~= nil then
+							currentBody:lastChild():after(nextDocument)
+						end
+					end
+				end
 			end
 		end
 	end
