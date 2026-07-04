@@ -1,4 +1,4 @@
--- {"id":1308639970,"ver":"1.0.24","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639970,"ver":"1.0.25","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.literotica.com"
 local settings = {}
@@ -359,9 +359,9 @@ local function search(filters)
 			return {}
 		end
 		local authorUrl = url:gsub("/$", "")
-		if not authorUrl:match("/works/stories") then
+		if not authorUrl:match("/works/%w+") then
 			authorUrl = authorUrl .. "/works/stories/all"
-		elseif not authorUrl:match("/works/stories/all") then
+		elseif not authorUrl:match("/works/%w+/all") then
 			authorUrl = authorUrl .. "/all"
 		end
 		local doc = ClientGetDocument(expandURL(authorUrl))

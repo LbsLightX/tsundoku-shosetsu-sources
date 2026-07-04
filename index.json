@@ -58,9 +58,9 @@
 			"fileName": "Literotica",
 			"imageURL": "",
 			"lang": "all",
-			"ver": "1.0.24",
+			"ver": "1.0.25",
 			"libVer": "1.0.0",
-			"md5": "c387a2fc29b379d6736934233bfac8aaa42dc27b83c9aad9c732eaa579681d92",
+			"md5": "55ae8ce63cae70a74f1e0bea977d8b6c08fd32c3ec3dd109d30b855d1e2dd6c7",
 			"type": "LuaScript"
 		},
 		{
