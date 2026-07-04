@@ -1,4 +1,4 @@
--- {"id":1308639970,"ver":"1.0.17","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639970,"ver":"1.0.18","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.literotica.com"
 local settings = {}
@@ -185,6 +185,9 @@ end
 
 local function getNovel(document, novelUrl, mainInfo)
 	local title = mainInfo.title
+	if title ~= nil and title ~= "" then
+		title = title .. string.char(0xe2, 0x80, 0x8b)
+	end
 	local summary = mainInfo.summary
 	local tags = mainInfo.tags
 	local authorElement = document:selectFirst("a[href*='/authors/'][href*='/works/stories'][title]")
@@ -253,7 +256,7 @@ local function parseNovel(novelURL, loadChapters)
 					local chapterLink = chapter and chapter:attr("href") or ""
 					return NovelChapter({
 						order = i,
-						title = "Chapter " .. i .. " - " .. chapterTitle,
+						title = chapterTitle,
 						link = shrinkURL(chapterLink),
 					})
 				end)
