@@ -9,23 +9,17 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+# Sets permissions of the GITHUB_TOKEN to allow pushing to gh-pages branch
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+# Concurrency group distinct from system Pages deployment to avoid deadlocks
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  group: "pages-build-${{ github.ref }}"
+  cancel-in-progress: true
 
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,15 +33,24 @@ jobs:
         run: |
           ./dev-setup.sh --tester
           java -jar bin/extension-tester.jar --ci --generate-index
-          mkdir public
+          
+          # Build root directory structure
+          mkdir -p public
           cp -r src public/
           cp -r lib public/
           cp -r icons public/
           cp index.json public/
           touch public/.nojekyll
+          
+          # Build duplicate legacy master/ directory structure for backward compatibility
+          mkdir -p public/master
+          cp -r src public/master/
+          cp -r lib public/master/
+          cp -r icons public/master/
+          cp index.json public/master/
+          touch public/master/.nojekyll
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-          destination_dir: ${{ github.ref_name }}

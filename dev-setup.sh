@@ -36,4 +36,10 @@ if [ "$DOWNLOAD_TESTER" = true ]; then
   ## Download extension tester
   mkdir -p bin
   wget -O bin/extension-tester.jar "https://gitlab.com/shosetsuorg/extension-tester/-/jobs/artifacts/development/raw/build/libs/extension-tester.jar?job=build"
+  
+  ## Validate zip file integrity
+  if ! unzip -t bin/extension-tester.jar &>/dev/null; then
+    echo "Error: Downloaded bin/extension-tester.jar is corrupt or invalid."
+    exit 1
+  fi
 fi
