@@ -1,4 +1,4 @@
--- {"id":1308639970,"ver":"1.0.21","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639970,"ver":"1.0.22","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.literotica.com"
 local settings = {}
@@ -367,20 +367,35 @@ local function search(filters)
 		local authorName = authorHeader and authorHeader:text() or ""
 		authorName = authorName:gsub("^Stories by%s+", ""):gsub("^Works by%s+", ""):gsub("^%s*(.-)%s*$", "%1")
 		local elements = doc:select("a[class*='_title_link_']")
-		return map(elements, function(v)
-			local title = v:text()
-			local link = shrinkURL(v:attr("href"))
+		local novels = {}
+		for idx = 0, elements:size() - 1 do
+			local v = elements:get(idx)
 			local parent = v:parent()
-			local card = parent and parent:parent()
-			local descElement = card and card:selectFirst("p[class*='_description_']")
-			local description = descElement and descElement:text() or ""
-			return Novel({
-				title = title,
-				link = link,
-				description = description,
-				authors = { authorName },
-			})
-		end)
+			local insidePartRow = false
+			while parent ~= nil do
+				local cls = parent:attr("class") or ""
+				if cls:match("_part_row_") then
+					insidePartRow = true
+					break
+				end
+				parent = parent:parent()
+			end
+			if not insidePartRow then
+				local title = v:text()
+				local link = shrinkURL(v:attr("href"))
+				local parentNode = v:parent()
+				local card = parentNode and parentNode:parent()
+				local descElement = card and card:selectFirst("p[class*='_description_']")
+				local description = descElement and descElement:text() or ""
+				table.insert(novels, Novel({
+					title = title,
+					link = link,
+					description = description,
+					authors = { authorName },
+				}))
+			end
+		end
+		return novels
 	elseif shrunk:match("^/s/") or shrunk:match("^/series/se/") then
 		if page ~= 1 then
 			return {}
