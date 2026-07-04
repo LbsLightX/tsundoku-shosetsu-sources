@@ -316,7 +316,7 @@ return {
 	baseURL = baseURL,
 
 	-- Optional values to change
-	imageURL = "https://jobobby04.github.io/ShosetsuExtensions/master/icons/ao3_icon.png",
+	imageURL = "",
 	hasCloudFlare = true,
 	hasSearch = true,
 

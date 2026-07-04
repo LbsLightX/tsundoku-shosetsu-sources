@@ -390,7 +390,7 @@ return {
 	baseURL = baseURL,
 
 	-- Optional values to change
-	imageURL = "https://LbsLightX.github.io/tsundoku-shosetsu-sources/master/icons/aff_icon.jpg",
+	imageURL = "",
 	hasCloudFlare = true,
 	hasSearch = true,
 
