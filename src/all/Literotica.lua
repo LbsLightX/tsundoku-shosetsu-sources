@@ -1,4 +1,4 @@
--- {"id":1308639970,"ver":"1.0.18","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639970,"ver":"1.0.19","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.literotica.com"
 local settings = {}
@@ -377,17 +377,28 @@ local function search(filters)
 		local novelUrl = url:gsub("/$", "")
 		local novelDocument = ClientGetDocument(expandURL(novelUrl))
 		local title = ""
+		local targetLink = shrunk
 		if shrunk:match("^/series/se/") then
 			local titleElement = novelDocument:selectFirst("h1")
 			title = titleElement and titleElement:text() or ""
 		else
-			local novel = novelDocument:selectFirst("article[itemtype='https://schema.org/Article'] h1")
-			title = novel and novel:text() or ""
+			local seriesPanel = novelDocument:selectFirst("[data-tab='tabpanel-series']")
+			local seriesLink = seriesPanel and seriesPanel:selectFirst("a[href*='/series/se/']")
+			if seriesLink ~= nil then
+				local seriesURL = seriesLink:attr("href")
+				local seriesDocument = ClientGetDocument(expandURL(seriesURL))
+				local titleElement = seriesDocument:selectFirst("h1")
+				title = titleElement and titleElement:text() or ""
+				targetLink = shrinkURL(seriesURL)
+			else
+				local novel = novelDocument:selectFirst("article[itemtype='https://schema.org/Article'] h1")
+				title = novel and novel:text() or ""
+			end
 		end
 		return {
 			Novel({
 				title = title,
-				link = shrunk,
+				link = targetLink,
 				imageURL = "",
 			}),
 		}
