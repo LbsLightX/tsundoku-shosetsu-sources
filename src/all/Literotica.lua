@@ -1,4 +1,4 @@
--- {"id":1308639970,"ver":"1.0.12","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639970,"ver":"1.0.13","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.literotica.com"
 local settings = {}
@@ -128,7 +128,7 @@ local function textToInteger(text)
 end
 
 local function getNovelInfoFromSeries(document)
-	local titleElement = document:selectFirst("h1.headline")
+	local titleElement = document:selectFirst("h1")
 	local title = titleElement and titleElement:text() or ""
 
 	local summary = document:selectFirst("#tabpanel-info div:nth-of-type(2)")
@@ -375,7 +375,7 @@ local function search(filters)
 		local novelDocument = ClientGetDocument(expandURL(novelUrl))
 		local title = ""
 		if shrunk:match("^/series/se/") then
-			local titleElement = novelDocument:selectFirst("h1.headline")
+			local titleElement = novelDocument:selectFirst("h1")
 			title = titleElement and titleElement:text() or ""
 		else
 			local novel = novelDocument:selectFirst("article[itemtype='https://schema.org/Article'] h1")
