@@ -1,0 +1,91 @@
+{
+	"authors": [
+		{
+			"id": -376799541,
+			"name": "Jobobby04",
+			"desc": "Worked on AdultFanFiction, ArchiveOfOurOwn, Hentai Foundry, Literotica, MCStories, ReadWN",
+			"imageURL": "",
+			"website": ""
+		},
+		{
+			"id": 1379167306,
+			"name": "David Kolf",
+			"desc": "Worked on dkjson",
+			"imageURL": "",
+			"website": ""
+		}
+	],
+	"libraries": [
+		{
+			"name": "ReadWN",
+			"ver": "1.0.11",
+			"url": null,
+			"hash": "3a27fd0b395a01361673c061868fcab998da2e01900a81712002a0ac3efe4cc9"
+		},
+		{
+			"name": "dkjson",
+			"ver": "1.0.1",
+			"url": null,
+			"hash": "3d3ae60d3cbffe84f2a4a5c8bc92e3c7bce75a3b7efb71d32a896b80c55f874e"
+		}
+	],
+	"scripts": [
+		{
+			"id": 1308639966,
+			"name": "ArchiveOfOurOwn",
+			"fileName": "ArchiveOfOurOwn",
+			"imageURL": "https://jobobby04.github.io/ShosetsuExtensions/master/icons/ao3_icon.png",
+			"lang": "all",
+			"ver": "1.0.10",
+			"libVer": "1.0.0",
+			"md5": "59573a0f2df86aff9f4d29177b12530b3f47eea9b7fa463d5405611e0d0d3861",
+			"type": "LuaScript"
+		},
+		{
+			"id": 1308639967,
+			"name": "Hentai Foundry",
+			"fileName": "HentaiFoundry",
+			"imageURL": "",
+			"lang": "all",
+			"ver": "1.0.0",
+			"libVer": "1.0.0",
+			"md5": "f400ce10f6f764e64c54e7fec55fecf99463e0b2774179b17a334a6969ad0a94",
+			"type": "LuaScript"
+		},
+		{
+			"id": 1308639970,
+			"name": "Literotica",
+			"fileName": "Literotica",
+			"imageURL": "https://LbsLightX.github.io/tsundoku-shosetsu-sources/master/icons/literotica_icon.jpg",
+			"lang": "all",
+			"ver": "2.0.0",
+			"libVer": "1.0.0",
+			"md5": "c4309edf135f7fffe62c6718f0e66fdd94548e69605e8f76f7cb67a27c9ae269",
+			"type": "LuaScript"
+		},
+		{
+			"id": 1308639977,
+			"name": "MCStories",
+			"fileName": "MCStories",
+			"imageURL": "",
+			"lang": "en",
+			"ver": "1.0.1",
+			"libVer": "1.0.0",
+			"md5": "2ad936bd9ccd5021da51a91cb437e2338f846d9d2744bb2c5a7943ef2b588314",
+			"type": "LuaScript"
+		},
+		{
+			"id": 1308639978,
+			"name": "AdultFanFiction",
+			"fileName": "AdultFanfiction",
+			"imageURL": "https://LbsLightX.github.io/tsundoku-shosetsu-sources/master/icons/aff_icon.jpg",
+			"lang": "en",
+			"ver": "1.5.0",
+			"libVer": "1.0.0",
+			"md5": "7c483925462d4aa2e631cbcbbcdc3352ac93f402d04454e0b2154c8ce2575591",
+			"type": "LuaScript"
+		}
+	],
+	"styles": [],
+	"js": []
+}
