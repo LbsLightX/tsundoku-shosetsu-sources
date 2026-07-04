@@ -1,4 +1,4 @@
--- {"id":1308639970,"ver":"1.0.27","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639970,"ver":"1.0.28","libVer":"1.0.0","author":"Jobobby04","dep":["dkjson>=1.0.1"]}
 
 local baseURL = "https://www.literotica.com"
 local settings = {}
@@ -367,51 +367,107 @@ local function search(filters)
 	local url = filters[QUERY]:gsub("^%s*(.-)%s*$", "%1")
 	local shrunk = shrinkURL(url)
 	if shrunk:match("^/authors/") then
-		if page > 1 then
-			return {}
-		end
 		local authorUrl = url:gsub("/$", "")
-		if authorUrl:match("/favorites/") or authorUrl:match("/lists") then
-			-- Do not append /all (avoid 404)
-		elseif not authorUrl:match("/works/%w+") then
-			authorUrl = authorUrl .. "/works/stories/all"
-		elseif not authorUrl:match("/works/%w+/all") then
-			authorUrl = authorUrl .. "/all"
-		end
-		local doc = ClientGetDocument(expandURL(authorUrl))
-		local authorHeader = doc:selectFirst("h1")
-		local authorName = authorHeader and authorHeader:text() or ""
-		authorName = authorName:gsub("^Stories by%s+", ""):gsub("^Works by%s+", ""):gsub("'s Favorite%s+%w+$", ""):gsub("^%s*(.-)%s*$", "%1")
-		local elements = doc:select("a[class*='_title_link_']")
-		local novels = {}
-		for idx = 0, elements:size() - 1 do
-			local v = elements:get(idx)
-			local parent = v:parent()
-			local insidePartRow = false
-			while parent ~= nil do
-				local cls = parent:attr("class") or ""
-				if cls:match("_part_row_") then
-					insidePartRow = true
-					break
-				end
-				parent = parent:parent()
+		local isFav = authorUrl:match("/favorites/")
+		local isList = authorUrl:match("/lists")
+
+		if isFav or isList then
+			local username = authorUrl:match("/authors/([^/]+)/favorites") or authorUrl:match("/authors/([^/]+)/lists")
+			local listid = authorUrl:match("[?&]listid=([0-9]+)")
+			local favType = authorUrl:match("/favorites/([^/]+)") or "stories"
+			local apiType = (favType == "poetry" or favType == "poems") and "poetry" or "story"
+			
+			local paramsStr
+			if isList and listid then
+				paramsStr = '{"page":' .. page .. ',"pageSize":50,"withSeriesDetails":true}'
+			else
+				paramsStr = '{"page":' .. page .. ',"pageSize":50,"type":"' .. apiType .. '","withSeriesDetails":true}'
 			end
-			if not insidePartRow then
-				local title = v:text()
-				local link = shrinkURL(v:attr("href"))
-				local parentNode = v:parent()
-				local card = parentNode and parentNode:parent()
-				local descElement = card and card:selectFirst("p[class*='_description_']")
-				local description = descElement and descElement:text() or ""
+			
+			local function urlEncodeParams(str)
+				return str:gsub("{", "%%7B"):gsub("}", "%%7D"):gsub("\"", "%%22"):gsub(":", "%%3A"):gsub(",", "%%2C")
+			end
+			local encoded = urlEncodeParams(paramsStr)
+			local apiUrl
+			if isList and listid then
+				apiUrl = "https://literotica.com/api/3/users/" .. username .. "/list/" .. listid .. "?params=" .. encoded
+			else
+				apiUrl = "https://literotica.com/api/3/users/" .. username .. "/favorite/works" .. "?params=" .. encoded
+			end
+			
+			local response = ClientRequestDocument(GET(apiUrl))
+			local dkjson = Require("dkjson")
+			local parsed = dkjson.decode(response)
+			if parsed == nil or parsed.data == nil then
+				return {}
+			end
+			
+			local novels = {}
+			for i, item in ipairs(parsed.data) do
+				local title = item.title or ""
+				local description = item.description or ""
+				local artist = item.authorname or (item.author and item.author.username) or ""
+				local itemUrl = item.url or ""
+				local itemType = item.type or "story"
+				local novelUrl
+				if itemType == "poetry" or itemType == "poem" then
+					novelUrl = "/p/" .. itemUrl
+				else
+					novelUrl = "/s/" .. itemUrl
+				end
+				
 				table.insert(novels, Novel({
 					title = title,
-					link = link,
+					link = novelUrl,
 					description = description,
-					authors = { authorName },
+					authors = { artist },
 				}))
 			end
+			return novels
+		else
+			if page > 1 then
+				return {}
+			end
+			if not authorUrl:match("/works/%w+") then
+				authorUrl = authorUrl .. "/works/stories/all"
+			elseif not authorUrl:match("/works/%w+/all") then
+				authorUrl = authorUrl .. "/all"
+			end
+			local doc = ClientGetDocument(expandURL(authorUrl))
+			local authorHeader = doc:selectFirst("h1")
+			local authorName = authorHeader and authorHeader:text() or ""
+			authorName = authorName:gsub("^Stories by%s+", ""):gsub("^Works by%s+", ""):gsub("'s Favorite%s+%w+$", ""):gsub("^%s*(.-)%s*$", "%1")
+			local elements = doc:select("a[class*='_title_link_']")
+			local novels = {}
+			for idx = 0, elements:size() - 1 do
+				local v = elements:get(idx)
+				local parent = v:parent()
+				local insidePartRow = false
+				while parent ~= nil do
+					local cls = parent:attr("class") or ""
+					if cls:match("_part_row_") then
+						insidePartRow = true
+						break
+					end
+					parent = parent:parent()
+				end
+				if not insidePartRow then
+					local title = v:text()
+					local link = shrinkURL(v:attr("href"))
+					local parentNode = v:parent()
+					local card = parentNode and parentNode:parent()
+					local descElement = card and card:selectFirst("p[class*='_description_']")
+					local description = descElement and descElement:text() or ""
+					table.insert(novels, Novel({
+						title = title,
+						link = link,
+						description = description,
+						authors = { authorName },
+					}))
+				end
+			end
+			return novels
 		end
-		return novels
 	elseif shrunk:match("^/s/") or shrunk:match("^/p/") or shrunk:match("^/series/se/") then
 		if page ~= 1 then
 			return {}
