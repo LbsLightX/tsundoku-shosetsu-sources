@@ -588,7 +588,7 @@ return {
 	baseURL = baseURL,
 
 	-- Optional values to change
-	imageURL = "",
+	imageURL = "https://LbsLightX.github.io/tsundoku-shosetsu-sources/master/icons/literotica_icon.jpg",
 	hasCloudFlare = false,
 	hasSearch = true,
 
