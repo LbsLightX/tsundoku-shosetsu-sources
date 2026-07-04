@@ -36,9 +36,9 @@
 			"fileName": "ArchiveOfOurOwn",
 			"imageURL": "https://jobobby04.github.io/ShosetsuExtensions/master/icons/ao3_icon.png",
 			"lang": "all",
-			"ver": "1.0.10",
+			"ver": "1.0.11",
 			"libVer": "1.0.0",
-			"md5": "59573a0f2df86aff9f4d29177b12530b3f47eea9b7fa463d5405611e0d0d3861",
+			"md5": "a7a8b6c420dfe3413b47cd42fa444170e33976c66dd68afd3e3006b4699fae83",
 			"type": "LuaScript"
 		},
 		{
@@ -58,9 +58,9 @@
 			"fileName": "Literotica",
 			"imageURL": "https://LbsLightX.github.io/tsundoku-shosetsu-sources/master/icons/literotica_icon.jpg",
 			"lang": "all",
-			"ver": "2.0.0",
+			"ver": "2.0.1",
 			"libVer": "1.0.0",
-			"md5": "c4309edf135f7fffe62c6718f0e66fdd94548e69605e8f76f7cb67a27c9ae269",
+			"md5": "3f1e771a07f71e71e8ede11a78d0b856d6d11cd8e1007b224cc79924f581e087",
 			"type": "LuaScript"
 		},
 		{
@@ -80,9 +80,9 @@
 			"fileName": "AdultFanfiction",
 			"imageURL": "https://LbsLightX.github.io/tsundoku-shosetsu-sources/master/icons/aff_icon.jpg",
 			"lang": "en",
-			"ver": "1.5.0",
+			"ver": "1.5.1",
 			"libVer": "1.0.0",
-			"md5": "7c483925462d4aa2e631cbcbbcdc3352ac93f402d04454e0b2154c8ce2575591",
+			"md5": "abca3635c2ecee1a0d110f9cb0703a924b8e5afa341800e1ee842412483ebaa2",
 			"type": "LuaScript"
 		}
 	],
