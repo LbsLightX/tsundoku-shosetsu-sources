@@ -56,11 +56,11 @@
 			"id": 1308639970,
 			"name": "Literotica",
 			"fileName": "Literotica",
-			"imageURL": "",
+			"imageURL": "https://LbsLightX.github.io/tsundoku-shosetsu-sources/master/icons/literotica_icon.jpg",
 			"lang": "all",
 			"ver": "2.0.0",
 			"libVer": "1.0.0",
-			"md5": "986409845671782ad1e16a939e8e91ab37c729c7a2eb7530d1cb0b8c26d84b7e",
+			"md5": "c4309edf135f7fffe62c6718f0e66fdd94548e69605e8f76f7cb67a27c9ae269",
 			"type": "LuaScript"
 		},
 		{
@@ -78,11 +78,11 @@
 			"id": 1308639978,
 			"name": "AdultFanFiction",
 			"fileName": "AdultFanfiction",
-			"imageURL": "",
+			"imageURL": "https://LbsLightX.github.io/tsundoku-shosetsu-sources/master/icons/aff_icon.jpg",
 			"lang": "en",
 			"ver": "1.5.0",
 			"libVer": "1.0.0",
-			"md5": "9b5e972001a36c8f262553fc173f479081eecc82ad9c59dd379ffe3d82ddb3c7",
+			"md5": "7c483925462d4aa2e631cbcbbcdc3352ac93f402d04454e0b2154c8ce2575591",
 			"type": "LuaScript"
 		}
 	],
