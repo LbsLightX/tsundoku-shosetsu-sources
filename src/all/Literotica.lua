@@ -1,4 +1,4 @@
--- {"id":1308639970,"ver":"1.0.28","libVer":"1.0.0","author":"Jobobby04","dep":["dkjson>=1.0.1"]}
+-- {"id":1308639970,"ver":"1.0.29","libVer":"1.0.0","author":"Jobobby04","dep":["dkjson>=1.0.1"]}
 
 local baseURL = "https://www.literotica.com"
 local settings = {}
@@ -375,7 +375,12 @@ local function search(filters)
 			local username = authorUrl:match("/authors/([^/]+)/favorites") or authorUrl:match("/authors/([^/]+)/lists")
 			local listid = authorUrl:match("[?&]listid=([0-9]+)")
 			local favType = authorUrl:match("/favorites/([^/]+)") or "stories"
-			local apiType = (favType == "poetry" or favType == "poems") and "poetry" or "story"
+			local apiType = "story"
+			if favType == "poetry" or favType == "poems" or favType == "poem" then
+				apiType = "poem"
+			elseif favType == "audio" then
+				apiType = "audio"
+			end
 			
 			local paramsStr
 			if isList and listid then
