@@ -47,7 +47,6 @@ jobs:
           mkdir -p public
           cp -r src public/
           cp -r lib public/
-          cp -r icons public/
           cp index.json public/
           touch public/.nojekyll
           
@@ -55,7 +54,6 @@ jobs:
           mkdir -p public/master
           cp -r src public/master/
           cp -r lib public/master/
-          cp -r icons public/master/
           cp index.json public/master/
           touch public/master/.nojekyll
       - name: Deploy to GitHub Pages
