@@ -20,6 +20,7 @@ local function ClientGetDocument(url)
 	return Document(ClientRequestDocument(GET(url)))
 end
 
+-- redeploy triggering index change
 local function getSettings()
 	return settings
 end
