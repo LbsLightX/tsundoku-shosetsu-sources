@@ -1,4 +1,4 @@
--- {"id":1308639970,"ver":"1.0.22","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639970,"ver":"1.0.23","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.literotica.com"
 local settings = {}
@@ -355,12 +355,12 @@ local function search(filters)
 	local url = filters[QUERY]:gsub("^%s*(.-)%s*$", "%1")
 	local shrunk = shrinkURL(url)
 	if shrunk:match("^/authors/") then
+		if page > 1 then
+			return {}
+		end
 		local authorUrl = url:gsub("/$", "")
 		if not authorUrl:match("/works/stories") then
 			authorUrl = authorUrl .. "/works/stories"
-		end
-		if page > 1 then
-			authorUrl = authorUrl .. "?page=" .. page
 		end
 		local doc = ClientGetDocument(expandURL(authorUrl))
 		local authorHeader = doc:selectFirst("h1")
