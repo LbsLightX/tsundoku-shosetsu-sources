@@ -5,6 +5,9 @@ on:
   # Runs on pushes targeting the default branch
   push:
     branches: ["master"]
+  # Runs on pull requests to ensure builds are verified before merge
+  pull_request:
+    branches: ["master"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -29,6 +32,12 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
+      - name: Cache Extension Tester JAR
+        id: cache-tester
+        uses: actions/cache@v4
+        with:
+          path: bin/
+          key: ${{ runner.os }}-tester-${{ hashFiles('dev-setup.sh') }}
       - name: Generate Index
         run: |
           ./dev-setup.sh --tester
@@ -50,6 +59,7 @@ jobs:
           cp index.json public/master/
           touch public/master/.nojekyll
       - name: Deploy to GitHub Pages
+        if: github.event_name != 'pull_request'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

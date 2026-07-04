@@ -33,13 +33,15 @@ if [ "$DOWNLOAD_DOC" = true ]; then
 fi
 
 if [ "$DOWNLOAD_TESTER" = true ]; then
-  ## Download extension tester
-  mkdir -p bin
-  wget -O bin/extension-tester.jar "https://gitlab.com/shosetsuorg/extension-tester/-/jobs/artifacts/development/raw/build/libs/extension-tester.jar?job=build"
-  
-  ## Validate zip file integrity
-  if ! unzip -t bin/extension-tester.jar &>/dev/null; then
-    echo "Error: Downloaded bin/extension-tester.jar is corrupt or invalid."
-    exit 1
+  ## Download extension tester if not present or corrupt
+  if [ ! -f bin/extension-tester.jar ] || ! unzip -t bin/extension-tester.jar &>/dev/null; then
+    mkdir -p bin
+    wget -O bin/extension-tester.jar "https://gitlab.com/shosetsuorg/extension-tester/-/jobs/artifacts/development/raw/build/libs/extension-tester.jar?job=build"
+    
+    ## Validate zip file integrity
+    if ! unzip -t bin/extension-tester.jar &>/dev/null; then
+      echo "Error: Downloaded bin/extension-tester.jar is corrupt or invalid."
+      exit 1
+    fi
   fi
 fi
