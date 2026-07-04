@@ -36,9 +36,9 @@
 			"fileName": "ArchiveOfOurOwn",
 			"imageURL": "https://jobobby04.github.io/ShosetsuExtensions/master/icons/ao3_icon.png",
 			"lang": "all",
-			"ver": "1.0.10",
+			"ver": "1.1.0",
 			"libVer": "1.0.0",
-			"md5": "59573a0f2df86aff9f4d29177b12530b3f47eea9b7fa463d5405611e0d0d3861",
+			"md5": "38b22dde241164e9dd9a57b39bc22471096cdb54454c10143636cd66346ae52d",
 			"type": "LuaScript"
 		},
 		{
@@ -47,9 +47,9 @@
 			"fileName": "HentaiFoundry",
 			"imageURL": "",
 			"lang": "all",
-			"ver": "1.0.0",
+			"ver": "1.1.0",
 			"libVer": "1.0.0",
-			"md5": "f400ce10f6f764e64c54e7fec55fecf99463e0b2774179b17a334a6969ad0a94",
+			"md5": "12cecf65b1c28c878c4363d926158108709c79039728b3bc237731d1cbe613b2",
 			"type": "LuaScript"
 		},
 		{
@@ -58,9 +58,9 @@
 			"fileName": "Literotica",
 			"imageURL": "https://LbsLightX.github.io/tsundoku-shosetsu-sources/master/icons/literotica_icon.jpg",
 			"lang": "all",
-			"ver": "2.0.0",
+			"ver": "2.1.0",
 			"libVer": "1.0.0",
-			"md5": "c4309edf135f7fffe62c6718f0e66fdd94548e69605e8f76f7cb67a27c9ae269",
+			"md5": "cb71f477cbef16e1bf159c2c8fe257608c86563938ea90976d472f91ba730aac",
 			"type": "LuaScript"
 		},
 		{
@@ -69,9 +69,9 @@
 			"fileName": "MCStories",
 			"imageURL": "",
 			"lang": "en",
-			"ver": "1.0.1",
+			"ver": "1.1.0",
 			"libVer": "1.0.0",
-			"md5": "2ad936bd9ccd5021da51a91cb437e2338f846d9d2744bb2c5a7943ef2b588314",
+			"md5": "fd441509ea081a06103e174f843447579800e4475e9615895e43e6ac23304aad",
 			"type": "LuaScript"
 		},
 		{
@@ -80,9 +80,9 @@
 			"fileName": "AdultFanfiction",
 			"imageURL": "https://LbsLightX.github.io/tsundoku-shosetsu-sources/master/icons/aff_icon.jpg",
 			"lang": "en",
-			"ver": "1.5.0",
+			"ver": "1.6.0",
 			"libVer": "1.0.0",
-			"md5": "7c483925462d4aa2e631cbcbbcdc3352ac93f402d04454e0b2154c8ce2575591",
+			"md5": "19fae1f79a61faed6918984d7129be492b29e251bd57eca6bc421492745aeec5",
 			"type": "LuaScript"
 		}
 	],

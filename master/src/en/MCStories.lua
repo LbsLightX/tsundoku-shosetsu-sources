@@ -1,4 +1,4 @@
--- {"id":1308639977,"ver":"1.0.1","libVer":"1.0.0","author":"Jobobby04","dep":["dkjson>=1.0.1"]}
+-- {"id":1308639977,"ver":"1.1.0","libVer":"1.0.0","author":"Jobobby04","dep":["dkjson>=1.0.1"]}
 
 local baseURL = "https://www.mcstories.com"
 local settings = {}

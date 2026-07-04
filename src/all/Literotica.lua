@@ -1,4 +1,4 @@
--- {"id":1308639970,"ver":"2.0.0","libVer":"1.0.0","author":"Jobobby04","dep":["dkjson>=1.0.1"]}
+-- {"id":1308639970,"ver":"2.1.0","libVer":"1.0.0","author":"Jobobby04","dep":["dkjson>=1.0.1"]}
 
 local baseURL = "https://www.literotica.com"
 local settings = {}

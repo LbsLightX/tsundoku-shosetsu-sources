@@ -1,4 +1,4 @@
--- {"id":1308639978,"ver":"1.5.1","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639978,"ver":"1.6.0","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.adult-fanfiction.org"
 local settings = {}
