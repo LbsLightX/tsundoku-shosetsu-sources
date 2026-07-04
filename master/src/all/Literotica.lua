@@ -20,6 +20,11 @@ local function ClientGetDocument(url)
 	return Document(ClientRequestDocument(GET(url)))
 end
 
+local function getSettings()
+	return settings
+end
+
+-- trigger deploy
 local function shrinkURL(url)
 	return url:gsub("^.-literotica%.com", "")
 end
