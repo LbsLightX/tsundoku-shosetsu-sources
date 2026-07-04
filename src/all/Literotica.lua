@@ -1,4 +1,4 @@
--- {"id":1308639970,"ver":"1.0.25","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639970,"ver":"1.0.26","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.literotica.com"
 local settings = {}
@@ -183,6 +183,18 @@ local function getNovel(document, novelUrl, mainInfo)
 	if authorElement == nil then
 		authorElement = document:selectFirst("a[href*='/authors/'][href$='/works'][title]")
 	end
+	if authorElement == nil then
+		local authorLinks = document:select("a[href*='/authors/']")
+		for idx = 0, authorLinks:size() - 1 do
+			local el = authorLinks:get(idx)
+			local txt = el:text() or ""
+			txt = txt:gsub("^%s*(.-)%s*$", "%1")
+			if txt ~= "" and not txt:match("Works") and not txt:match("Followers") then
+				authorElement = el
+				break
+			end
+		end
+	end
 	local author = authorElement and (authorElement:attr("title") or authorElement:text()) or ""
 
 	local authors = {}
@@ -240,7 +252,7 @@ local function parseNovel(novelURL, loadChapters)
 			local chapterEntries = series:select("h2:contains(Table of Contents) + ul > li")
 			if chapterEntries:size() > 0 then
 				chapters = map(chapterEntries, function(v, i)
-					local chapter = v:selectFirst("a[href*='/s/']")
+					local chapter = v:selectFirst("a[href*='/s/'], a[href*='/p/']")
 					local chapterTitle = chapter and chapter:text() or v:text()
 					local chapterLink = chapter and chapter:attr("href") or ""
 					return NovelChapter({
@@ -359,7 +371,9 @@ local function search(filters)
 			return {}
 		end
 		local authorUrl = url:gsub("/$", "")
-		if not authorUrl:match("/works/%w+") then
+		if authorUrl:match("/favorites/") or authorUrl:match("/lists") then
+			-- Do not append /all (avoid 404)
+		elseif not authorUrl:match("/works/%w+") then
 			authorUrl = authorUrl .. "/works/stories/all"
 		elseif not authorUrl:match("/works/%w+/all") then
 			authorUrl = authorUrl .. "/all"
@@ -367,7 +381,7 @@ local function search(filters)
 		local doc = ClientGetDocument(expandURL(authorUrl))
 		local authorHeader = doc:selectFirst("h1")
 		local authorName = authorHeader and authorHeader:text() or ""
-		authorName = authorName:gsub("^Stories by%s+", ""):gsub("^Works by%s+", ""):gsub("^%s*(.-)%s*$", "%1")
+		authorName = authorName:gsub("^Stories by%s+", ""):gsub("^Works by%s+", ""):gsub("'s Favorite%s+%w+$", ""):gsub("^%s*(.-)%s*$", "%1")
 		local elements = doc:select("a[class*='_title_link_']")
 		local novels = {}
 		for idx = 0, elements:size() - 1 do
@@ -398,7 +412,7 @@ local function search(filters)
 			end
 		end
 		return novels
-	elseif shrunk:match("^/s/") or shrunk:match("^/series/se/") then
+	elseif shrunk:match("^/s/") or shrunk:match("^/p/") or shrunk:match("^/series/se/") then
 		if page ~= 1 then
 			return {}
 		end
