@@ -1,4 +1,4 @@
--- {"id":1308639970,"ver":"1.0.19","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639970,"ver":"1.0.20","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.literotica.com"
 local settings = {}
@@ -114,17 +114,6 @@ local function getPassage(chapterURL)
 	chap:child(0):before("<h4>" .. summary .. "</h4>")
 	chap:child(0):before("<h1>" .. title .. "</h1>")
 	return pageOfElem(chap, true)
-end
-
-local function textToInteger(text)
-	local number, unit = text:match("(%d+%.?%d*)(%a*)")
-	number = tonumber(number)
-
-	if unit == "k" then
-		number = number * 1000
-	end
-
-	return math.floor(number)
 end
 
 local function getNovelInfoFromSeries(document)
@@ -343,11 +332,6 @@ local function split(str, delimiter)
 		table.insert(result, match)
 	end
 	return result
-end
-
--- Function to trim whitespace from the beginning and end of a string
-local function trim(s)
-	return s:gsub("^%s+", ""):gsub("%s+$", "")
 end
 
 local SortByOptions = {
