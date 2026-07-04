@@ -1,4 +1,4 @@
--- {"id":1308639970,"ver":"1.0.20","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639970,"ver":"1.0.21","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.literotica.com"
 local settings = {}
@@ -354,7 +354,34 @@ local function search(filters)
 	local page = filters[PAGE]
 	local url = filters[QUERY]:gsub("^%s*(.-)%s*$", "%1")
 	local shrunk = shrinkURL(url)
-	if shrunk:match("^/s/") or shrunk:match("^/series/se/") then
+	if shrunk:match("^/authors/") then
+		local authorUrl = url:gsub("/$", "")
+		if not authorUrl:match("/works/stories") then
+			authorUrl = authorUrl .. "/works/stories"
+		end
+		if page > 1 then
+			authorUrl = authorUrl .. "?page=" .. page
+		end
+		local doc = ClientGetDocument(expandURL(authorUrl))
+		local authorHeader = doc:selectFirst("h1")
+		local authorName = authorHeader and authorHeader:text() or ""
+		authorName = authorName:gsub("^Stories by%s+", ""):gsub("^Works by%s+", ""):gsub("^%s*(.-)%s*$", "%1")
+		local elements = doc:select("a[class*='_title_link_']")
+		return map(elements, function(v)
+			local title = v:text()
+			local link = shrinkURL(v:attr("href"))
+			local parent = v:parent()
+			local card = parent and parent:parent()
+			local descElement = card and card:selectFirst("p[class*='_description_']")
+			local description = descElement and descElement:text() or ""
+			return Novel({
+				title = title,
+				link = link,
+				description = description,
+				authors = { authorName },
+			})
+		end)
+	elseif shrunk:match("^/s/") or shrunk:match("^/series/se/") then
 		if page ~= 1 then
 			return {}
 		end
