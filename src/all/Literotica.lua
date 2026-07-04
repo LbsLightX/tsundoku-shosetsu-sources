@@ -223,12 +223,16 @@ local function parseNovel(novelURL, loadChapters)
 
 	local document = ClientGetDocument(expandURL(novelURL))
 
-	local seriesPanel = document:selectFirst("[data-tab='tabpanel-series']")
 	local series
-	if seriesPanel ~= nil then
-		local seriesLink = seriesPanel:selectFirst("a[href*='/series/se/']")
-		if seriesLink ~= nil then
-			series = ClientGetDocument(expandURL(seriesLink:attr("href")))
+	if normalizedURL:match("^series/se/") then
+		series = document
+	else
+		local seriesPanel = document:selectFirst("[data-tab='tabpanel-series']")
+		if seriesPanel ~= nil then
+			local seriesLink = seriesPanel:selectFirst("a[href*='/series/se/']")
+			if seriesLink ~= nil then
+				series = ClientGetDocument(expandURL(seriesLink:attr("href")))
+			end
 		end
 	end
 	local info
@@ -362,17 +366,25 @@ local WithinOptions = {
 local function search(filters)
 	local page = filters[PAGE]
 	local url = filters[QUERY]:gsub("^%s*(.-)%s*$", "%1")
-	if shrinkURL(url):match("/s/%a+") then
+	local shrunk = shrinkURL(url)
+	if shrunk:match("^/s/") or shrunk:match("^/series/se/") then
 		if page ~= 1 then
 			return {}
 		end
 		local novelUrl = url:gsub("/$", "")
 		local novelDocument = ClientGetDocument(expandURL(novelUrl))
-		local novel = novelDocument:selectFirst("article[itemtype='https://schema.org/Article'] h1")
+		local title = ""
+		if shrunk:match("^/series/se/") then
+			local titleElement = novelDocument:selectFirst("h1.headline")
+			title = titleElement and titleElement:text() or ""
+		else
+			local novel = novelDocument:selectFirst("article[itemtype='https://schema.org/Article'] h1")
+			title = novel and novel:text() or ""
+		end
 		return {
 			Novel({
-				title = novel and novel:text() or "",
-				link = shrinkURL(url),
+				title = title,
+				link = shrunk,
 				imageURL = "",
 			}),
 		}
