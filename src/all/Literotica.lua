@@ -1,4 +1,4 @@
--- {"id":1308639970,"ver":"1.0.15","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639970,"ver":"1.0.16","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.literotica.com"
 local settings = {}
@@ -247,14 +247,13 @@ local function parseNovel(novelURL, loadChapters)
 		if series ~= nil then
 			local chapterEntries = series:select("h2:contains(Table of Contents) + ul > li")
 			if chapterEntries:size() > 0 then
-				local prefix = string.char(0xc2, 0xb7) .. " "
 				chapters = map(chapterEntries, function(v, i)
 					local chapter = v:selectFirst("a[href*='/s/']")
 					local chapterTitle = chapter and chapter:text() or v:text()
 					local chapterLink = chapter and chapter:attr("href") or ""
 					return NovelChapter({
 						order = i,
-						title = prefix .. chapterTitle,
+						title = "Chapter " .. i .. " - " .. chapterTitle,
 						link = shrinkURL(chapterLink),
 					})
 				end)
@@ -262,11 +261,10 @@ local function parseNovel(novelURL, loadChapters)
 		end
 
 		if chapters == nil then
-			local prefix = string.char(0xc2, 0xb7) .. " "
 			chapters = {
 				NovelChapter({
 					order = 0,
-					title = prefix .. info:getTitle(),
+					title = info:getTitle(),
 					link = novelURL,
 				}),
 			}
