@@ -26,7 +26,7 @@
 			"name": "dkjson",
 			"ver": "1.0.1",
 			"url": null,
-			"hash": "97803cfe54b21695dda1e8f8a37c5933c4dc7691e5df17c2c1df6cef1203c259"
+			"hash": "3d3ae60d3cbffe84f2a4a5c8bc92e3c7bce75a3b7efb71d32a896b80c55f874e"
 		}
 	],
 	"scripts": [
@@ -36,9 +36,9 @@
 			"fileName": "ArchiveOfOurOwn",
 			"imageURL": "https://jobobby04.github.io/ShosetsuExtensions/master/icons/ao3_icon.png",
 			"lang": "all",
-			"ver": "1.0.9",
+			"ver": "1.0.10",
 			"libVer": "1.0.0",
-			"md5": "3a766bb694c4805a46abc2cd54f73ddaad18c98899a4fbba219899c9c14d299f",
+			"md5": "59573a0f2df86aff9f4d29177b12530b3f47eea9b7fa463d5405611e0d0d3861",
 			"type": "LuaScript"
 		},
 		{
@@ -58,9 +58,9 @@
 			"fileName": "Literotica",
 			"imageURL": "",
 			"lang": "all",
-			"ver": "1.0.29",
+			"ver": "2.0.0",
 			"libVer": "1.0.0",
-			"md5": "c4e8b8bc16879817cbc62df80289da6fc27cd143ed00aa9a0c242d279a77fedf",
+			"md5": "986409845671782ad1e16a939e8e91ab37c729c7a2eb7530d1cb0b8c26d84b7e",
 			"type": "LuaScript"
 		},
 		{
@@ -80,9 +80,9 @@
 			"fileName": "AdultFanfiction",
 			"imageURL": "",
 			"lang": "en",
-			"ver": "1.0.11",
+			"ver": "1.5.0",
 			"libVer": "1.0.0",
-			"md5": "167902b47f51d61abcd2e44c6da67882b5f0b659b2de237feed6f3f287e324b9",
+			"md5": "9b5e972001a36c8f262553fc173f479081eecc82ad9c59dd379ffe3d82ddb3c7",
 			"type": "LuaScript"
 		}
 	],
