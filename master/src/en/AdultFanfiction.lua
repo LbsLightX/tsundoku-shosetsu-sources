@@ -1,4 +1,4 @@
--- {"id":1308639978,"ver":"1.0.11","libVer":"1.0.0","author":"Jobobby04"}
+-- {"id":1308639978,"ver":"1.5.0","libVer":"1.0.0","author":"Jobobby04"}
 
 local baseURL = "https://www.adult-fanfiction.org"
 local settings = {}
@@ -6,8 +6,12 @@ local settings = {}
 local function shrinkURL(url)
 	local cleanUrl = url:gsub("^https?://", "")
 	local subdomain, rest = cleanUrl:match(
-		"^([^./]+)%.?adult%-fanfiction%.org(/.*)$"
+		"^([^./]+)%.adult%-fanfiction%.org(/.*)$"
 	)
+	if not subdomain then
+		rest = cleanUrl:match("^adult%-fanfiction%.org(/.*)$")
+		subdomain = "www"
+	end
 	return (subdomain or "www") .. "@" .. (rest or "/")
 end
 
@@ -171,7 +175,8 @@ local function parseNovel(novelURL, loadChapters)
 	local title = document:selectFirst(".story-header-left > h1"):text()
 	local authorElement = document:selectFirst(".story-header-author > a")
 	local author = authorElement:text()
-	local subdomain = fullUrl:match("^https?://([^/]+)"):match("^([^.]+)%.")
+	local host = fullUrl:match("^https?://([^/]+)")
+	local subdomain = host:match("^([^.]+)%.adult%-fanfiction%.org") or "www"
 	local authorId = authorElement:attr("href"):match("id=(%d+)")
 	local authorStories = GETDocumentAdult(
 		"https://members.adult-fanfiction.org/load-user-stories.php?subdomain=" .. subdomain .. "&uid=" .. authorId

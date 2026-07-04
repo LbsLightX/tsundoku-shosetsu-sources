@@ -748,7 +748,8 @@ local json_mediatype = MediaType("application/json; charset=utf-8")
 
 function json.GET(url, ...)
 	local res = Request(GET(url, ...))
-	if res:headers():get("Content-Type"):sub(1, 16) == "application/json" then
+	local contentType = res:headers():get("Content-Type")
+	if contentType and contentType:sub(1, 16) == "application/json" then
 		return json.decode(res:body():string())
 	end
 	return res:body():string()
@@ -764,7 +765,8 @@ function json.POST(url, body, ...)
 	end
 	body = RequestBody(body, json_mediatype)
 	local res = Request(POST(url, headers, body, cctl))
-	if res:headers():get("Content-Type"):sub(1, 16) == "application/json" then
+	local contentType = res:headers():get("Content-Type")
+	if contentType and contentType:sub(1, 16) == "application/json" then
 		return json.decode(res:body():string())
 	end
 	return res:body():string()
