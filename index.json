@@ -3,7 +3,7 @@
 		{
 			"id": -376799541,
 			"name": "Jobobby04",
-			"desc": "Worked on AdultFanFiction, ArchiveOfOurOwn, Hentai Foundry, Literotica, MCStories, ReadWN",
+			"desc": "Worked on AdultFanFiction, ArchiveOfOurOwn, Literotica, MCStories, ReadWN",
 			"imageURL": "",
 			"website": ""
 		},
@@ -34,33 +34,22 @@
 			"id": 1308639966,
 			"name": "ArchiveOfOurOwn",
 			"fileName": "ArchiveOfOurOwn",
-			"imageURL": "https://jobobby04.github.io/ShosetsuExtensions/master/icons/ao3_icon.png",
-			"lang": "all",
-			"ver": "1.1.0",
-			"libVer": "1.0.0",
-			"md5": "38b22dde241164e9dd9a57b39bc22471096cdb54454c10143636cd66346ae52d",
-			"type": "LuaScript"
-		},
-		{
-			"id": 1308639967,
-			"name": "Hentai Foundry",
-			"fileName": "HentaiFoundry",
 			"imageURL": "",
 			"lang": "all",
 			"ver": "1.1.0",
 			"libVer": "1.0.0",
-			"md5": "12cecf65b1c28c878c4363d926158108709c79039728b3bc237731d1cbe613b2",
+			"md5": "92e9e560c6f1d04285ae1d9225a0b0d9fc4e216a4abf532166dd34d1193f55f0",
 			"type": "LuaScript"
 		},
 		{
 			"id": 1308639970,
 			"name": "Literotica",
 			"fileName": "Literotica",
-			"imageURL": "https://LbsLightX.github.io/tsundoku-shosetsu-sources/master/icons/literotica_icon.jpg",
+			"imageURL": "",
 			"lang": "all",
 			"ver": "2.1.0",
 			"libVer": "1.0.0",
-			"md5": "cb71f477cbef16e1bf159c2c8fe257608c86563938ea90976d472f91ba730aac",
+			"md5": "c49715841925bef6114253889dd1eaf63b44a58a9877ea6c1d1b7efa3c74d7d3",
 			"type": "LuaScript"
 		},
 		{
@@ -78,11 +67,11 @@
 			"id": 1308639978,
 			"name": "AdultFanFiction",
 			"fileName": "AdultFanfiction",
-			"imageURL": "https://LbsLightX.github.io/tsundoku-shosetsu-sources/master/icons/aff_icon.jpg",
+			"imageURL": "",
 			"lang": "en",
 			"ver": "1.6.0",
 			"libVer": "1.0.0",
-			"md5": "19fae1f79a61faed6918984d7129be492b29e251bd57eca6bc421492745aeec5",
+			"md5": "12ad38c8e74d7e813819a23e1b9fc4dcafacc75fb38eb7642e5fd2039a1d7089",
 			"type": "LuaScript"
 		}
 	],
