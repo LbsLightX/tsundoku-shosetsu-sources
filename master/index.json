@@ -3,7 +3,7 @@
 		{
 			"id": -376799541,
 			"name": "Jobobby04",
-			"desc": "Worked on AdultFanFiction, ArchiveOfOurOwn, Hentai Foundry, Literotica, MCStories, ReadWN",
+			"desc": "Worked on AdultFanFiction, ArchiveOfOurOwn, Literotica, MCStories, ReadWN",
 			"imageURL": "",
 			"website": ""
 		},
@@ -39,17 +39,6 @@
 			"ver": "1.1.0",
 			"libVer": "1.0.0",
 			"md5": "92e9e560c6f1d04285ae1d9225a0b0d9fc4e216a4abf532166dd34d1193f55f0",
-			"type": "LuaScript"
-		},
-		{
-			"id": 1308639967,
-			"name": "Hentai Foundry",
-			"fileName": "HentaiFoundry",
-			"imageURL": "",
-			"lang": "all",
-			"ver": "1.1.0",
-			"libVer": "1.0.0",
-			"md5": "12cecf65b1c28c878c4363d926158108709c79039728b3bc237731d1cbe613b2",
 			"type": "LuaScript"
 		},
 		{
